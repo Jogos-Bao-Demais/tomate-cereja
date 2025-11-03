@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://cbljophrxojhr"]
+
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_a8pr3"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_j6lu3"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_tpt06"]
+
+[sub_resource type="Environment" id="Environment_a8pr3"]
+
+[sub_resource type="Compositor" id="Compositor_j6lu3"]
+compositor_effects = Array[CompositorEffect]([null])
+
+[sub_resource type="Resource" id="Resource_16ffl"]
+script = ExtResource("3_tpt06")
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_a8pr3")
+compositor = SubResource("Compositor_j6lu3")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.779338, 0)
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("1_a8pr3")
+
+[node name="PhantomCamera3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.779338, 0)
+script = ExtResource("2_j6lu3")
+tween_resource = SubResource("Resource_16ffl")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179918, -0.188538, -1.94622)
+size = Vector3(6.6886, 0.622925, 1)
