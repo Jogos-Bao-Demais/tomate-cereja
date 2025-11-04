@@ -1,36 +1,58 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbljophrxojhr"]
+[gd_scene load_steps=6 format=3 uid="uid://cbljophrxojhr"]
 
-[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_a8pr3"]
-[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_j6lu3"]
-[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_tpt06"]
+[ext_resource type="PackedScene" uid="uid://coubjs111iecm" path="res://prefabs/entities/lombradin.tscn" id="1_2ddto"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ddto"]
+albedo_color = Color(0.44313726, 1, 1, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ddto"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_rgld7"]
+sky_material = SubResource("ProceduralSkyMaterial_2ddto")
 
 [sub_resource type="Environment" id="Environment_a8pr3"]
-
-[sub_resource type="Compositor" id="Compositor_j6lu3"]
-compositor_effects = Array[CompositorEffect]([null])
-
-[sub_resource type="Resource" id="Resource_16ffl"]
-script = ExtResource("3_tpt06")
+background_mode = 2
+sky = SubResource("Sky_rgld7")
+tonemap_mode = 2
+glow_enabled = true
 
 [node name="World" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Lombradin" parent="." instance=ExtResource("1_2ddto")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+_sens = 0.25
+
+[node name="Head" parent="Lombradin" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62350655, -0.18821734)
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="World" type="Node3D" parent="Environment"]
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Environment/World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5838051, 0.58077884, -4.2636566)
+use_collision = true
+size = Vector3(7.594116, 2.0966797, 1)
+material = SubResource("StandardMaterial3D_2ddto")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Environment/World"]
+transform = Transform3D(-0.05928898, 0, 0.9982408, 0, 1, 0, -0.9982408, 0, -0.05928898, 5.3962955, 0.58077884, 2.3365488)
+use_collision = true
+size = Vector3(7.594116, 2.0966797, 1)
+material = SubResource("StandardMaterial3D_2ddto")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Environment/World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.173092, -0.5363667, -0.26365662)
+use_collision = true
+size = Vector3(96.91995, 0.28948984, 77.135284)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_a8pr3")
-compositor = SubResource("Compositor_j6lu3")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.779338, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
 
-[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
-process_priority = 300
-process_physics_priority = 300
-script = ExtResource("1_a8pr3")
-
-[node name="PhantomCamera3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.779338, 0)
-script = ExtResource("2_j6lu3")
-tween_resource = SubResource("Resource_16ffl")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179918, -0.188538, -1.94622)
-size = Vector3(6.6886, 0.622925, 1)
+[editable path="Lombradin"]
