@@ -5,11 +5,9 @@ const GameLayers = preload("res://scripts/systems/game_layers.gd")
 var _gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 @export_group("Movement")
-@export var _walk_speed := 5.
-@export var _run_speed := 5.
+@export var _walk_speed := 4.
+@export var _run_speed := 6.
 @export var _friction := 5.
-
-var speed = .0
 
 @export_group("Camera")
 @export_range(.01, 1) var _sens := 0.5
@@ -41,11 +39,10 @@ func _physics_process(delta: float) -> void:
 	var is_running = Input.is_action_pressed("sprint")
 
 	if direction:
-		velocity.x = direction.x * (if (is_running) _run_speed else walk_speed)
-		velocity.z = direction.z * _walk_speed 
+		velocity = direction * (_run_speed if is_running else _walk_speed)
 	else:
-		velocity.x = move_toward(velocity.x, 0, _friction )
-		velocity.z = move_toward(velocity.z, 0, _friction )
+		velocity.x = move_toward(velocity.x, 0, _friction)
+		velocity.z = move_toward(velocity.z, 0, _friction)
 
 	_t_bob += delta * velocity.length() * float(is_on_floor())
 	_pcamera.transform.origin = _headbob(_t_bob)
@@ -58,7 +55,7 @@ func _handleCamera(event: InputEvent):
 		_pcamera.rotate_x(-event.relative.y * _sens * 0.01)
 		_pcamera.rotation.x = clamp(_pcamera.rotation.x, deg_to_rad(_MIN_PITCH), deg_to_rad(_MAX_PITCH))
 
-func _headbob(time) -> Vector3:
+func _headbob(time: float) -> Vector3:
 	var pos = Vector3.ZERO
 	pos.y = sin(time * _bob_frequency) * _bob_amplitude
 	pos.x = sin(time * _bob_frequency / 2) * _bob_amplitude
